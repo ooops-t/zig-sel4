@@ -1,0 +1,62 @@
+* Ziglang for seL4
+
+** Build
+#+begin_src shell
+  $ zig build-obj --entry _start -static -Ttls_rootserver.lds main.zig sel4.c -I.
+  $ zig build-exe main.o --stack 0 # must be set the GUN_STACK to 0
+#+end_src
+
+** Test result
+#+begin_src shell
+	./simulate: qemu-system-x86_64  -cpu Nehalem,-vme,+pdpe1gb,-xsave,-xsaveopt,-xsavec,-fsgsbase,-invpcid,+syscall,+lm,enforce -nographic -serial mon:stdio -m size=512M  -kernel images/kernel-x86_64-pc99 -initrd images/rootserver-image-x86_64-pc99 Boot config: debug_port = 0x3f8
+	
+	Boot config: disable_iommu = false
+	Detected 1 boot module(s):
+	module #0: start=0xa13000 end=0xac06c8 size=0xad6c8 name='images/rootserver-image-x86_64-pc99'
+	Parsing GRUB physical memory map
+	    Physical Memory Region from 0 size 9fc00 type 1
+	    Physical Memory Region from 9fc00 size 400 type 2
+	    Physical Memory Region from f0000 size 10000 type 2
+	    Physical Memory Region from 100000 size 1fee0000 type 1
+	Adding physical memory region 0x100000-0x1ffe0000
+	    Physical Memory Region from 1ffe0000 size 20000 type 2
+	    Physical Memory Region from fffc0000 size 40000 type 2
+	Multiboot gave us no video information
+	ACPI: RSDP paddr=0xf68c0
+	ACPI: RSDP vaddr=0xf68c0
+	ACPI: RSDT paddr=0x1ffe15fc
+	ACPI: RSDT vaddr=0x1ffe15fc
+	Kernel loaded to: start=0x100000 end=0xa12000 size=0x912000 entry=0x1002ea
+	ACPI: RSDT paddr=0x1ffe15fc
+	ACPI: RSDT vaddr=0x1ffe15fc
+	ACPI: FADT paddr=0x1ffe1458
+	ACPI: FADT vaddr=0x1ffe1458
+	ACPI: FADT flags=0x80a5
+	ACPI: 0 IOMMUs detected
+	ACPI: MADT paddr=0x1ffe154c
+	ACPI: MADT vaddr=0x1ffe154c
+	ACPI: MADT apic_addr=0xfee00000
+	ACPI: MADT flags=0x1
+	ACPI: MADT_APIC apic_id=0x0
+	ACPI: MADT_IOAPIC ioapic_id=0 ioapic_addr=0xfec00000 gsib=0
+	ACPI: MADT_ISO bus=0 source=0 gsi=2 flags=0x0
+	ACPI: MADT_ISO bus=0 source=5 gsi=5 flags=0xd
+	ACPI: MADT_ISO bus=0 source=9 gsi=9 flags=0xd
+	ACPI: MADT_ISO bus=0 source=10 gsi=10 flags=0xd
+	ACPI: MADT_ISO bus=0 source=11 gsi=11 flags=0xd
+	ACPI: 1 CPU(s) detected
+	ELF-loading userland images from boot modules:
+	size=0x55000 v_entry=0x2083e0 v_start=0x200000 v_end=0x255000 p_start=0xac1000 p_end=0xb16000
+	Moving loaded userland images to final location: from=0xac1000 to=0xa12000 size=0x55000
+	Starting node #0 with APIC ID 0
+	Mapping kernel window is done
+	available phys memory regions: 1
+	[100000..1ffe0000]
+	reserved virt address space regions: 1
+	[ffffff8000100000..ffffff8000a67000]
+	Booting all finished, dropped to user space
+	seL4
+	seL4
+	seL4
+	...
+#+end_src
