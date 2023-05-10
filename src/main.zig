@@ -1,5 +1,5 @@
 const c = @cImport({
-    @cInclude("./sel4.h");
+    @cInclude("sel4/sel4.h");
 });
 
 export var stack_bytes: [16 * 1024]u8 align(16) linksection(".bss") = undefined;
@@ -73,11 +73,8 @@ export fn __sel4_start_init_boot_info() void {
 
 export fn main() void {
     while (true) {
-        c.seL4_DebugPutChar('s');
-        c.seL4_DebugPutChar('e');
-        c.seL4_DebugPutChar('L');
-        c.seL4_DebugPutChar('4');
-        c.seL4_DebugPutChar('\n');
+        //        c.seL4_DebugPutString("string");
+        c.seL4_DebugDumpScheduler();
     }
 }
 
